@@ -8,14 +8,14 @@ using TruckingServices;
 using System.Configuration;
 using System.Xml;
 using System.IO;
-
+using TruckingServices.Models;
+using TruckingServices.database;
 namespace TestTruckingServices
 {
     public class UnitTestDatabase : IDisposable
     {
         // Set up the connection string for your local database here
-        string? _connectionString = "";//@"Data Source=OWNER-PC\SQLEXPRESS;Initial Catalog=Trucking;Integrated Security=True";// = @"Data Source=OWNER-PC\SQLEXPRESS;Initial Catalog=Trucking;Integrated Security=True";
-
+        string? _connectionString = "";
         public UnitTestDatabase()
         {
             initializePopulateDatabase();
@@ -25,7 +25,7 @@ namespace TestTruckingServices
         // This is a kludgy way to get the connection string
         private string getAppDataFromTruckingServices()
         {
-            string connStr = @"Data Source=OWNER-PC\SQLEXPRESS;Initial Catalog=Trucking;Integrated Security=True";
+            string connStr = @"Data Source=LAPTOP-CMOUV9KC\SQLEXPRESS;Initial Catalog=Trucking;Persist Security Info=True;User ID=Tracking_Trucks;Password=waswas123";
             // string value;
             //bool result = File.Exists(@"..\..\..\..\TruckingServices\App.config");
             XmlReader xmlReader = XmlReader.Create(@"..\..\..\..\TruckingServices\App.config");
@@ -47,8 +47,7 @@ namespace TestTruckingServices
         // Make sure data is in the database to start with and that it's the data used for testing
         private void initializePopulateDatabase()
         {
-            _connectionString = getAppDataFromTruckingServices();// @"Data Source=OWNER-PC\SQLEXPRESS;Initial Catalog=Trucking;Integrated Security=True";// ConfigurationManager.ConnectionStrings["DBCS"].ConnectionString;
-            //_connectionString = MainWindow._connectionString; // Pull in connection string from the TruckingServices project
+            _connectionString = getAppDataFromTruckingServices();
             Database db = new Database(_connectionString);
 
             //clear out the database so that the data can be added anew

@@ -23,6 +23,10 @@ namespace TruckingServices.database
 
         }
 
+        public Database(string connectionString)
+        {
+        }
+
         // Log errors to file "trucking.log"
         private void logLineToFile(string data)
         {
