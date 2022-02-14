@@ -1,0 +1,424 @@
+﻿<Window
+    x:Class="TruckingServices.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:TruckingServices"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="Trucking Services"
+    Width="800"
+    Height="750"
+    Background="{DynamicResource MaterialDesignPaper}"
+    FontFamily="{DynamicResource MaterialDesignFont}"
+    KeyUp="Window_KeyUp"
+    TextElement.FontSize="13"
+    TextElement.FontWeight="Regular"
+    TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+    TextOptions.TextFormattingMode="Ideal"
+    TextOptions.TextRenderingMode="Auto"
+    mc:Ignorable="d">
+    <Window.Resources>
+        <Style TargetType="{x:Type GridViewColumnHeader}">
+            <Setter Property="HorizontalContentAlignment" Value="Left" />
+            <Setter Property="Margin" Value="5,0,5,0" />
+        </Style>
+    </Window.Resources>
+    <Grid Background="#5ccccc">
+        <Border
+            Width="650"
+            Height="600"
+            Padding="10"
+            Background="White"
+            BorderBrush="White"
+            BorderThickness="10,10,10,10"
+            CornerRadius="25">
+            <Grid Width="600" Height="550">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50" />
+                    <RowDefinition
+                        Height="Auto"
+                        MinHeight="100"
+                        MaxHeight="250" />
+                    <RowDefinition Height="*" MinHeight="100" />
+                </Grid.RowDefinitions>
+                <StackPanel
+                    Grid.Row="0"
+                    Margin="10,0,0,0"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Top"
+                    Orientation="Horizontal">
+                    <Button
+                        Uid="Print"
+                        Width="150"
+                        Height="50"
+                        Background="{x:Null}"
+                        BorderBrush="{x:Null}"
+                        Click="Menu_Button_Click"
+                        Content="דוחות"
+                        Foreground="#FF2196F3" />
+                    <Button
+                        Uid="Customers"
+                        Width="150"
+                        Height="50"
+                        Background="{x:Null}"
+                        BorderBrush="{x:Null}"
+                        Click="Menu_Button_Click"
+                        Content="הוספת לקוחות"
+                        Foreground="#FF2196F3" />
+                    <Button
+                        Uid="Orders"
+                        Width="150"
+                        Height="50"
+                        Background="{x:Null}"
+                        BorderBrush="{x:Null}"
+                        Click="Menu_Button_Click"
+                        Content="הזמנות"
+                        Foreground="#FF2196F3" />
+                </StackPanel>
+
+                <GroupBox
+                    x:Name="_grpBoxCustomers"
+                    Grid.Row="1"
+                    Width="600"
+                    Height="200"
+                    Margin="5"
+                    Padding="10"
+                    Header="לקוחות"
+                    Visibility="Visible">
+                    <ListView
+                        x:Name="_lstVwCustomers"
+                        Width="500"
+                        Height="150"
+                        Margin="2,2,2,2"
+                        BorderBrush="Aquamarine"
+                        BorderThickness="2"
+                        MouseLeftButtonDown="_lstVwCustomers_MouseLeftButtonDown">
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <EventSetter Event="PreviewMouseLeftButtonUp" Handler="_lstVwCustomersItem_PreviewMouseLeftButtonUp" />
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                        <ListView.View>
+                            <GridView x:Name="_grdVwCustomers">
+                                <GridViewColumn DisplayMemberBinding="{Binding IDCard}">
+                                    <GridViewColumn.Header>
+                                        <GridViewColumnHeader
+                                            Width="80"
+                                            Click="_lstVwCustomerColumnHeader_Click"
+                                            Tag="IDCard">
+                                            ID Card
+                                        </GridViewColumnHeader>
+                                    </GridViewColumn.Header>
+                                </GridViewColumn>
+
+                                <GridViewColumn DisplayMemberBinding="{Binding CustomerName}">
+                                    <GridViewColumn.Header>
+                                        <GridViewColumnHeader
+                                            Width="150"
+                                            Click="_lstVwCustomerColumnHeader_Click"
+                                            Tag="CustomerName">
+                                            Name
+                                        </GridViewColumnHeader>
+                                    </GridViewColumn.Header>
+                                </GridViewColumn>
+
+                                <GridViewColumn
+                                    Width="100"
+                                    DisplayMemberBinding="{Binding PhoneNumber}"
+                                    Header="טלפון" />
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </GroupBox>
+
+                <GridSplitter
+                    Grid.Row="1"
+                    Width="600"
+                    Height="1"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Bottom"
+                    Background="Indigo"
+                    ResizeBehavior="BasedOnAlignment"
+                    ResizeDirection="Rows" />
+
+                <GroupBox
+                    x:Name="_grpBoxCustomerForm"
+                    Grid.Row="2"
+                    Width="600"
+                    MinHeight="270"
+                    MaxHeight="400"
+                    Margin="5"
+                    Header="Customer Form"
+                    Visibility="Visible">
+                    <StackPanel Orientation="Vertical">
+                        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                            <StackPanel Margin="5" Orientation="Vertical">
+                                <TextBox
+                                    x:Name="_txtBxCustomerAddName"
+                                    Width="280"
+                                    materialDesign:HintAssist.Hint="שם לקוח"
+                                    Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                                <TextBox
+                                    x:Name="_txtBxCustomerAddCompanyName"
+                                    Width="280"
+                                    materialDesign:HintAssist.Hint="שם חברה"
+                                    Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                                <TextBox
+                                    x:Name="_txtBxCustomerAddid"
+                                    Width="280"
+                                    materialDesign:HintAssist.Hint="תעודת זהות\ח.פ"
+                                    Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                            </StackPanel>
+                            <StackPanel Margin="5" Orientation="Vertical">
+                                <TextBox
+                                    x:Name="_txtBxCustomerAddArea"
+                                    Width="280"
+                                    materialDesign:HintAssist.Hint="אזור"
+                                    Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                                <TextBox
+                                    x:Name="_txtBxCustomerAddCity"
+                                    Width="280"
+                                    materialDesign:HintAssist.Hint="עיר"
+                                    Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                                <TextBox
+                                    x:Name="_txtBxCustomerAddnumberphone"
+                                    Width="280"
+                                    materialDesign:HintAssist.Hint="מספר טלפון"
+                                    Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                            </StackPanel>
+                        </StackPanel>
+
+
+                        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                            <Button
+                                x:Name="_btnAddCustomer"
+                                Width="150"
+                                Height="45"
+                                Margin="10,10,10,10"
+                                VerticalAlignment="Bottom"
+                                Click="btnAddCustomer_Click"
+                                Content="הוסף" />
+                            <Button
+                                x:Name="_btnDeleteCustomer"
+                                Width="150"
+                                Height="45"
+                                Margin="10,10,10,10"
+                                Click="_btnDeleteCustomer_Click"
+                                Content="מחק" />
+                            <Button
+                                x:Name="_btnUpdateCustomer"
+                                Width="150"
+                                Height="45"
+                                Margin="10,10,10,10"
+                                Click="_btnUpdateCustomer_Click"
+                                Content="עידכון" />
+                        </StackPanel>
+                    </StackPanel>
+                </GroupBox>
+
+                <GroupBox
+                    x:Name="_grpBoxCustomerOrderForm"
+                    Grid.Row="2"
+                    Width="600"
+                    MinHeight="230"
+                    MaxHeight="400"
+                    Margin="5"
+                    Header="Customer Order Form"
+                    Visibility="Hidden">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="400" />
+                            <ColumnDefinition Width="50*" />
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Width="400" Orientation="Vertical">
+                            <StackPanel HorizontalAlignment="Left" Orientation="Horizontal">
+                                <TextBox
+                                    x:Name="_txtBxOrderNumber"
+                                    Width="85"
+                                    Margin="5,0,5,0"
+                                    materialDesign:HintAssist.Hint="מספר הובלה"
+                                    IsReadOnly="True"
+                                    Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                                <TextBox
+                                    x:Name="_txtBxOrderCustomerName"
+                                    Width="150"
+                                    Margin="5,0,5,0"
+                                    materialDesign:HintAssist.Hint="שם לקוח"
+                                    IsReadOnly="True"
+                                    Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                                <TextBox
+                                    x:Name="_txtBxOrderCustomerID"
+                                    Width="85"
+                                    Margin="5,0,5,0"
+                                    materialDesign:HintAssist.Hint="תעודת זהות"
+                                    IsReadOnly="True"
+                                    Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                            </StackPanel>
+
+                            <StackPanel Margin="0" Orientation="Horizontal">
+                                <DatePicker
+                                    x:Name="_dtPkrTransport"
+                                    Width="150"
+                                    Margin="2,0,2,0"
+                                    SelectedDateFormat="Short" />
+                                <TextBox
+                                    x:Name="_txtBxOrderShippingWeight"
+                                    Width="150"
+                                    Margin="2,0,2,0"
+                                    materialDesign:HintAssist.Hint="מחיר משטח"
+                                    Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                            </StackPanel>
+
+                            <StackPanel Margin="0" Orientation="Horizontal">
+                                <TextBox
+                                    x:Name="_txtBxOrderStartingPoint"
+                                    Width="150"
+                                    Margin="2,0,2,0"
+                                    materialDesign:HintAssist.Hint="נקודת התחלה"
+                                    Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                                <TextBox
+                                    x:Name="_txtBxOrderDestination"
+                                    Width="150"
+                                    Margin="2,0,2,0"
+                                    materialDesign:HintAssist.Hint="יעד"
+                                    Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal">
+                                <TextBox
+                                    x:Name="_txtBxOrderNumberOfPallets"
+                                    Width="150"
+                                    Margin="2,0,2,0"
+                                    materialDesign:HintAssist.Hint="מספר משטחים"
+                                    Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                                <TextBox
+                                    x:Name="_txtBxOrderPrice"
+                                    Width="150"
+                                    Margin="2,0,2,0"
+                                    materialDesign:HintAssist.Hint="מחיר"
+                                    IsReadOnly="True"
+                                    Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                            </StackPanel>
+
+                            <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                                <Button
+                                    x:Name="_btnOrderAdd"
+                                    Width="100"
+                                    Height="30"
+                                    Margin="10,10,10,10"
+                                    Click="btnAddOrder_Click"
+                                    Content="הוסף" />
+                                <Button
+                                    x:Name="_btnOrderDelete"
+                                    Width="100"
+                                    Height="30"
+                                    Margin="10,10,10,10"
+                                    Click="_btnDeleteOrder_Click"
+                                    Content="מחק" />
+                                <Button
+                                    x:Name="_btnOrderUpdate"
+                                    Width="100"
+                                    Height="30"
+                                    Margin="10,10,10,10"
+                                    Click="_btnUpdateOrder_Click"
+                                    Content="עידכן" />
+                            </StackPanel>
+                        </StackPanel>
+
+                        <ListView
+                            x:Name="_lstVwOrders"
+                            Grid.Column="1"
+                            Width="180"
+                            Margin="2,0,2,0">
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <EventSetter Event="PreviewMouseLeftButtonUp" Handler="_lstVwOrdersItem_PreviewMouseLeftButtonUp" />
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                            <ListView.View>
+                                <GridView x:Name="_grdVwCustomerOrder">
+                                    <GridViewColumn
+                                        Width="80"
+                                        DisplayMemberBinding="{Binding OrderID}"
+                                        Header="Order ID" />
+
+                                    <GridViewColumn Width="100" Header="Date">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Foreground="Blue" Text="{Binding DateString}" />
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                    </Grid>
+                </GroupBox>
+
+                <GroupBox
+                    x:Name="_grpBoxPrintOrders"
+                    Grid.Row="2"
+                    Width="600"
+                    MinHeight="230"
+                    MaxHeight="400"
+                    Margin="5"
+                    Header="Customer Order Print"
+                    Visibility="Hidden">
+                    <StackPanel HorizontalAlignment="Center" Orientation="Vertical">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBox
+                                x:Name="_txtBxPrintCustomerName"
+                                Width="150"
+                                Margin="5,0,5,0"
+                                materialDesign:HintAssist.Hint="Customer Name"
+                                IsReadOnly="True"
+                                Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                            <TextBox
+                                x:Name="_txtBxPrintCustomerID"
+                                Width="85"
+                                Margin="5,0,5,0"
+                                materialDesign:HintAssist.Hint="ID Card"
+                                IsReadOnly="True"
+                                Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Margin="10,0,2,0" Text="From:" />
+                            <DatePicker
+                                x:Name="_dtPkrPrintFrom"
+                                Width="100"
+                                CalendarClosed="_dtPkrPrintFrom_CalendarClosed" />
+                            <TextBlock Margin="50,0,0,0" Text="To:" />
+                            <DatePicker
+                                x:Name="_dtPkrPrintTo"
+                                Width="100"
+                                CalendarClosed="_dtPkrPrintTo_CalendarClosed" />
+                            <Button
+                                x:Name="_btnPrintOrder"
+                                Width="80"
+                                Height="22"
+                                Margin="15,1,1,1"
+                                Click="_btnPrintOrder_Click"
+                                Content="Print"
+                                FontSize="12" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <RichTextBox
+                                x:Name="_rTxtBxPrintOut"
+                                Width="500"
+                                Height="160"
+                                Margin="4,14,4,14"
+                                Background="AliceBlue"
+                                IsReadOnly="True"
+                                VerticalScrollBarVisibility="Auto" />
+
+                        </StackPanel>
+                    </StackPanel>
+                </GroupBox>
+            </Grid>
+
+        </Border>
+    </Grid>
+</Window>
